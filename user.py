@@ -8,6 +8,6 @@ conn.execute('''CREATE TABLE users
 		firstName String,
 		lastName String,
 		address1 Strjng,
-    admin bool, 
+    		admin bool, 
 		payment integer
 		)''')
