@@ -3,34 +3,37 @@ import user
 
 
 # main menu
-print('Please enter one of the menu options below:')
-print('1: Login')
-print('2: Create Account')
-print('3: Exit')
+user.initialMenu()
 
-menu = input()
-#print(menu1)
+#user.initialMenu()
 
-if menu == '1':
-    print("Enter Username: ")
-    username = input()
-    password = input("Enter Password: \n")
-    valid = user.login(username, password)
-    print()
-    #print(valid)
 
-    if valid == 1:
-        print("new menu")
-    else:
-        print("Invalid Login")
-        exit()
+#print('Please enter one of the menu options below:')
+# print('1: Login')
+# print('2: Create Account')
+# print('3: Exit Program')
 
-elif menu == '2':
-    print('Enter Username: ')
-    username = input()
-    password = input("Enter Password: ")
-    user.createUser(username, password)
-else:
-    print('invalid input')
+# menu = input("Enter Integer of Menu to enter: ")
 
-#user.say_hello()
+# if menu == '1':
+#     print("Enter Username: ")
+#     username = input()
+#     password = input("Enter Password: \n")
+#     valid = user.login(username, password)
+#     print()
+
+#     if valid == 1:
+#         #print("new menu")
+#         user.userMenu()
+#     else:
+#         print("Invalid Login. Exiting Program")
+#         exit()
+
+# elif menu == '2':
+#     print('Enter Username: ')
+#     username = input()
+#     password = input("Enter Password: ")
+#     user.createUser(username, password)
+#     user.userMenu()
+# else:
+#     print('invalid input')
