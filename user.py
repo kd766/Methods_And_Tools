@@ -351,3 +351,69 @@ def deleteAccount(username):
     connection.close()
     #initialMenu()
     sys.exit()
+    
+    
+    
+    def createShoppingCart(username, userId):
+	try:
+		  connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="methods"
+        )
+    except:
+        print("Failed connection.")
+        sys.exit()
+		
+		cursor = connection.cursor()
+		#cursor.execute("INSERT INTO users (Username, Password) VALUES")
+		query = "INSERT INTO users (Username, Password) VALUES (%s, %s)"
+		data = (username, password)
+		
+def shoppingCart(username):
+	localShopingCart = cart
+	print('----User Shopping Cart----')
+	print('1: Items')
+	print('2: Add To Cart')
+	print('3: Remove From Cart')
+	print('4: Checkout')
+	
+	selection = input('Enter Integer of Menu to Enter: ')
+	print()
+	
+	if selection == '1':
+	print()
+	#shoppingCart()
+
+
+def addToCart(shoppingCart): 
+	localShopingCart = cart
+	
+def removeFromCart(shoppingCart):
+	localShopingCart = cart
+	try: 
+		connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="methods"
+        )
+    except:
+        print("Failed connection.")
+        ## exits the program if unsuccessful
+        sys.exit()
+		
+		cursor = connection.cursor()
+		
+		query = "DELETE FROM cart WHERE shoppingCart = %s"
+		data = (localShopingCart, )
+		
+		cursor.execute(query, data)
+		connection.commit()
+		
+		print('Shopping Cart: ' + localShopingCart + ' Deleted. Exiting Program')
+		cursor.close()
+		connection.close()
+		#initialMenu()
+		sys.exit()
