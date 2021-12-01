@@ -389,6 +389,16 @@ def shoppingCart(username):
 
 def addToCart(shoppingCart): 
 	localShopingCart = cart
+	try:
+		 connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="methods"
+            )
+
+        except:
+            print 
 	
 def removeFromCart(shoppingCart):
 	localShopingCart = cart
@@ -417,3 +427,15 @@ def removeFromCart(shoppingCart):
 		connection.close()
 		#initialMenu()
 		sys.exit()
+
+		
+		
+def removeAll(shoppingCart):
+	localShoppingCart = cart
+	try: 
+		connection = mysql.connector.connect(
+	    host= "localhost",
+	    user= "root",
+	    password= "",
+	    database="methods"
+	
