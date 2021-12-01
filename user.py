@@ -438,4 +438,16 @@ def removeAll(shoppingCart):
 	    user= "root",
 	    password= "",
 	    database="methods"
+			
+        except:
+			print("failed connection.")
+			##exits the program if unsuccessful
+			sys.exit()
+	cursor = connection.cursor()
+	query =
+	data = (localUserName)
+	cursor.execute(query, data)
+	connection.commit()
+			
+	print 
 	
