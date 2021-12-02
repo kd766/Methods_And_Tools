@@ -2,9 +2,10 @@
 
 import mysql.connector
 import sys
+import item
+import cart
 
-#globalUser = 'p1'
-
+# Print all user information
 try:
     connection = mysql.connector.connect(
         host="localhost",
@@ -14,11 +15,9 @@ try:
     )
 except:
     print("Failed connection.")
-
     sys.exit()
 
 cursor = connection.cursor()
-
 cursor.execute("SELECT * FROM users")
 
 result = cursor.fetchall()
@@ -139,9 +138,10 @@ def userMenu(username):
 
     if selection == '1':
         print()
-        #userMenu()
+        item.initialItemMenu(localUserName)
     elif selection == '2':
         print()
+        cart.cartMenu(localUserName)
     elif selection == '3':
         accountInfo(localUserName)
     elif selection == '4':
@@ -151,7 +151,7 @@ def userMenu(username):
         sys.exit()
     else:
         print('Invalid Input\n')
-        userMenu()
+        userMenu(localUserName)
 
 def accountInfo(username):
     localUserName = username
@@ -168,6 +168,9 @@ def accountInfo(username):
     if selection == '1':
         print()
         editAccount(localUserName)
+    elif selection == '2':
+        print()
+        cart.pastItems(localUserName)
     elif selection == '3':
         print('Logging out user: ' + localUserName + '\n\n')
         initialMenu()
@@ -186,7 +189,7 @@ def accountInfo(username):
 
 def editAccount(username):
     localUserName = username
-    print('Edit Account ' + localUserName + ':')
+    print('Edit Account for user: ' + localUserName)
     print('1: Update First Name')
     print('2: Update Last Name')
     print('3: Update Credit Card Number')
@@ -349,105 +352,4 @@ def deleteAccount(username):
     print('Account: ' + localUserName + ' Deleted. Exiting Program')
     cursor.close()
     connection.close()
-    #initialMenu()
     sys.exit()
-    
-    
-    
-    def createShoppingCart(username, userId):
-	try:
-		  connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="methods"
-        )
-    except:
-        print("Failed connection.")
-        sys.exit()
-		
-		cursor = connection.cursor()
-		#cursor.execute("INSERT INTO users (Username, Password) VALUES")
-		query = "INSERT INTO users (Username, Password) VALUES (%s, %s)"
-		data = (username, password)
-		
-def shoppingCart(username):
-	localShopingCart = cart
-	print('----User Shopping Cart----')
-	print('1: Items')
-	print('2: Add To Cart')
-	print('3: Remove From Cart')
-	print('4: Checkout')
-	
-	selection = input('Enter Integer of Menu to Enter: ')
-	print()
-	
-	if selection == '1':
-	print()
-	#shoppingCart()
-
-
-def addToCart(shoppingCart): 
-	localShopingCart = cart
-	try:
-		 connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="methods"
-            )
-
-        except:
-            print 
-	
-def removeFromCart(shoppingCart):
-	localShopingCart = cart
-	try: 
-		connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="methods"
-        )
-    except:
-        print("Failed connection.")
-        ## exits the program if unsuccessful
-        sys.exit()
-		
-		cursor = connection.cursor()
-		
-		query = "DELETE FROM cart WHERE shoppingCart = %s"
-		data = (localShopingCart, )
-		
-		cursor.execute(query, data)
-		connection.commit()
-		
-		print('Shopping Cart: ' + localShopingCart + ' Deleted. Exiting Program')
-		cursor.close()
-		connection.close()
-		#initialMenu()
-		sys.exit()
-
-		
-		
-def removeAll(shoppingCart):
-	localShoppingCart = cart
-	try: 
-		connection = mysql.connector.connect(
-	    host= "localhost",
-	    user= "root",
-	    password= "",
-	    database="methods"
-			
-        except:
-			print("failed connection.")
-			##exits the program if unsuccessful
-			sys.exit()
-	cursor = connection.cursor()
-	query =
-	data = (localUserName)
-	cursor.execute(query, data)
-	connection.commit()
-			
-	print 
-	
