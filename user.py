@@ -6,36 +6,41 @@ import item
 import cart
 
 # Print all user information
-try:
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="methods"
-    )
-except:
-    print("Failed connection.")
-    sys.exit()
+# try:
+#     connection = mysql.connector.connect(
+#         host="localhost",
+#         user="root",
+#         password="",
+#         database="methods"
+#     )
+# except:
+#     print("Failed connection.")
+#     sys.exit()
 
-cursor = connection.cursor()
-cursor.execute("SELECT * FROM users")
+# cursor = connection.cursor()
+# cursor.execute("SELECT * FROM users")
 
-result = cursor.fetchall()
+# result = cursor.fetchall()
 
-for x in result:
-    print(x)
+# for x in result:
+#     print(x)
 
-cursor.close()
-connection.close()
+# cursor.close()
+# connection.close()
 
+
+# Main menu for the shopping cart App
 def initialMenu():
+    print('-----Main Menu-----')
     print('1: Login')
     print('2: Create Account')
     print('3: Exit Program')
+    print('-------------------')
 
-    menu = input("Enter Integer of Menu to enter: ")
+    menu = input("Enter Integer of Menu to enter: \n")
     print()
 
+    # enter username and password. verify and either login or say invalid
     if menu == '1':
         print("Enter Username: ")
         username = input()
@@ -55,16 +60,15 @@ def initialMenu():
         if username == '':
             print('Invalid input. Returning to Main Menu.\n')
             initialMenu()
-        password = input("Enter Password: ")
+        password = input("Enter Password: \n")
         if password == '':
             print('Invalid input. Returning to Main Menu.\n')
             initialMenu()
         createUser(username, password)
-        #userMenu(username)
     elif menu == '3':
         sys.exit()
     else:
-        print('invalid input')
+        print('Invalid input.')
         initialMenu()
 
 def login(user, password):
@@ -83,14 +87,13 @@ def login(user, password):
         sys.exit()
 
     cursor = connection.cursor()
-    # cursor.execute("SELECT * FROM users")
+
     query = ("SELECT username, password FROM users WHERE username = %s")
     data = (localUserName, )
     cursor.execute(query, data)
     result = cursor.fetchall()
 
     for x in result:
-        #if localUserName == x[1] and localPassword == x[3]:
         if localUserName == x[0] and localPassword == x[1]:
 
             return 1
@@ -112,28 +115,29 @@ def createUser(username, password):
         sys.exit()
 
     cursor = connection.cursor()
-    #cursor.execute("INSERT INTO users (Username, Password) VALUES")
+
     query = "INSERT INTO users (Username, Password) VALUES (%s, %s)"
     data = (username, password)
 
     cursor.execute(query, data)
     connection.commit()
-    print("User: " + username + " created. Exiting Program")
+    print("User: " + username + " created.\n")
     cursor.close()
     connection.close()
-    #initialMenu()
-    sys.exit()
+    initialMenu()
 
 def userMenu(username):
     localUserName = username
     print('-----User Menu-----')
+    print('User: ' + localUserName)
     print('1: Items')
     print('2: Cart Information')
     print('3: Account Information')
     print('4: Logout')
     print('5: Exit Program')
+    print('-------------------')
 
-    selection = input('Enter Integer of Menu to Enter: ')
+    selection = input('Enter Integer of Menu to Enter: \n')
     print()
 
     if selection == '1':
@@ -156,6 +160,7 @@ def userMenu(username):
 def accountInfo(username):
     localUserName = username
     print('-----Account Info-----')
+    print('User: ' + localUserName)
     print('1: Edit Account Info')
     print('2: View Order History')
     print('3: Logout')
@@ -163,7 +168,7 @@ def accountInfo(username):
     print('5: Go Back')
     print('----------------------')
 
-    selection = input('Enter Integer of Menu to Enter: ')
+    selection = input('Enter Integer of Menu to Enter: \n')
 
     if selection == '1':
         print()
@@ -189,47 +194,51 @@ def accountInfo(username):
 
 def editAccount(username):
     localUserName = username
-    print('Edit Account for user: ' + localUserName)
+    print('-----Edit Account-----')
+    print('User: ' + localUserName)
     print('1: Update First Name')
     print('2: Update Last Name')
     print('3: Update Credit Card Number')
     print('4: Update Shipping Address')
-    print('5: Go Back')
+    print('5: Display account Info')
+    print('6: Go Back')
+    print('----------------------')
 
 
-    selection = input('Enter Integer of Information to Update: ')
+    selection = input('Enter Integer of Information to Update: \n')
 
     if selection == '1':
-        update = input('Enter new FirstName: ')
+        update = input('Enter new FirstName: \n')
         if update == '':
             print('Invalid input. Returning to Edit Account Menu\n')
             editAccount(localUserName)
         else:
             editFName(localUserName, update)
     elif selection == '2':
-        update = input('Enter new LastName: ')
+        update = input('Enter new LastName: \n')
         if update == '':
             print('Invalid input. Returning to Edit Account Menu\n')
             editAccount(localUserName)
         else:
             editLName(localUserName, update)
     elif selection == '3':
-        update = input('Enter new CreditCard number: ')
+        update = input('Enter new CreditCard number: \n')
         if len(update) != 16:
             print('Invalid input. Returning to Edit Account Menu\n')
             editAccount(localUserName)
         else:
-            #print('yes\n')
             editCreditCard(localUserName, update)
     elif selection == '4':
-        update = input('Enter new Shipping Address: ')
+        update = input('Enter new Shipping Address: \n')
         if update == '':
             print('Invalid input. Returning to Edit Account Menu\n')
             editAccount(localUserName)
         else:
             editShipping(localUserName, update)
     elif selection == '5':
-        print('Returning to Previous Menu\n')
+        displayInfo(localUserName)
+    elif selection == '6':
+        print('\nReturning to Previous Menu\n')
         accountInfo(localUserName)
     else:
         print('Invalid Input\n')
@@ -256,7 +265,8 @@ def editFName(username, update):
     print('User: ' + localUserName + ' changed FirstName to: ' + localUpdate + '\n')
     cursor.execute(query, data)
     connection.commit()
-    sys.exit()
+    editAccount(localUserName)
+    #sys.exit()
 
 def editLName(username, update):
     localUserName = username
@@ -279,7 +289,8 @@ def editLName(username, update):
     print('User: ' + localUserName + ' changed LastName to: ' + localUpdate + '\n')
     cursor.execute(query, data)
     connection.commit()
-    sys.exit()
+    #sys.exit()
+    editAccount(localUserName)
 
 def editCreditCard(username, update):
     localUserName = username
@@ -302,7 +313,8 @@ def editCreditCard(username, update):
     print('User: ' + localUserName + ' changed LastName to: ' + localUpdate + '\n')
     cursor.execute(query, data)
     connection.commit()
-    sys.exit()
+    #sys.exit()
+    editAccount(localUserName)
 
 def editShipping(username, update):
     localUserName = username
@@ -325,7 +337,38 @@ def editShipping(username, update):
     print('User: ' + localUserName + ' changed ShippingAddress to: ' + localUpdate + '\n')
     cursor.execute(query, data)
     connection.commit()
-    sys.exit()
+    #sys.exit()
+    editAccount(localUserName)
+
+def displayInfo(username):
+    localUserName = username
+
+    try:
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="methods"
+        )
+    except:
+        print("Failed connection.")
+        sys.exit()
+
+    cursor = connection.cursor()
+    query = "SELECT * FROM users WHERE Username = %s"
+    data = (localUserName, )
+
+    print('\nUsername, FirstName, LastName, Password, CardNumber, and ShippingAddress')
+    cursor.execute(query, data)
+
+    result = cursor.fetchall()
+    for x in result:
+        print(x)
+
+    print()
+    cursor.close()
+    connection.close()
+    editAccount(localUserName)
 
 def deleteAccount(username):
     localUserName = username
@@ -338,18 +381,34 @@ def deleteAccount(username):
         )
     except:
         print("Failed connection.")
-        ## exits the program if unsuccessful
         sys.exit()
 
     cursor = connection.cursor()
+    query = "DELETE FROM cart WHERE cartUser = %s"
+    data = (localUserName, )
 
+    cursor.execute(query, data)
+    connection.commit()
+    cursor.close()
+
+
+    cursor = connection.cursor()
+    query = "DELETE FROM pastorders WHERE orderUser = %s"
+    data = (localUserName, )
+
+    cursor.execute(query, data)
+    connection.commit()
+    cursor.close()
+
+
+    cursor = connection.cursor()
     query = "DELETE FROM users WHERE username = %s"
     data = (localUserName, )
 
     cursor.execute(query, data)
     connection.commit()
 
-    print('Account: ' + localUserName + ' Deleted. Exiting Program')
+    print('Account: ' + localUserName + ' Deleted. Returning to Main Menu')
     cursor.close()
     connection.close()
-    sys.exit()
+    initialMenu()

@@ -9,10 +9,12 @@ def cartMenu(username):
     localUserName = username
 
     print('-----Cart Information-----')
+    print('User: ' + localUserName)
     print('1: View Cart')
     print('2: Add or Remove Items')
     print('3: Checkout')
     print('4: Go Back')
+    print('--------------------------')
 
     selection = input('Enter Integer of Menu to Enter: \n')
 
@@ -31,7 +33,6 @@ def cartMenu(username):
         print('\nInvalid input.')
         cartMenu(localUserName) 
 
-
 def viewCart(username):
     localUserName = username
 
@@ -47,7 +48,7 @@ def viewCart(username):
         sys.exit()
 
     cursor = connection.cursor()
-    query = ('SELECT users.Username, books.ISBN, books.Title FROM users, books, cart WHERE cart.cartUser = %s AND users.Username = cart.cartUser AND books.ISBN = cart.cartISBN')
+    query = ('SELECT books.ISBN, books.Title FROM users, books, cart WHERE cart.cartUser = %s AND users.Username = cart.cartUser AND books.ISBN = cart.cartISBN')
     data = (localUserName, )
 
     cursor.execute(query, data)
@@ -84,7 +85,7 @@ def addItemToCart(username):
 
     cursor.execute(query, data)
     connection.commit()
-    print('Book with ISBN: ' + book + ' added to cart for user: ' + localUserName)
+    print('Book with ISBN: ' + book + ' added to cart for user: ' + localUserName + '\n')
     cursor.close()
     connection.close()
 
@@ -113,7 +114,7 @@ def removeItemFromCart(username):
     cursor.execute(query, data)
     connection.commit()
 
-    print('Book with ISBN: ' + book + ' removed from cart for user: ' + localUserName)
+    print('Book with ISBN: ' + book + ' removed from cart for user: ' + localUserName + '\n')
     cursor.close()
     connection.close()
     
@@ -141,9 +142,8 @@ def checkout(username):
 
     cursor.execute(query, data)
     connection.commit()
-    print('inserting cart into new table')
+    print('Adding order to order history')
     cursor.close()
-    # connection.close()
 
     # update the quantity of the items
     cursor = connection.cursor()
@@ -162,11 +162,12 @@ def checkout(username):
 
     cursor.execute(query, data)
     connection.commit()
-    print("Deleting the cart")
+    print("Deleting the items from cart")
 
     cursor.close()
     connection.close()
-    sys.exit()
+    #sys.exit()
+    item.initialItemMenu(localUserName)
 
 def pastItems(username):
     localUserName = username
@@ -183,7 +184,7 @@ def pastItems(username):
         sys.exit()
 
     cursor = connection.cursor()
-    query = ('SELECT users.Username, books.ISBN, books.Title FROM users, books, pastorders WHERE pastorders.orderUser = %s AND users.Username = pastorders.orderUser AND books.ISBN = pastorders.orderISBN')
+    query = ('SELECT books.ISBN, books.Title FROM users, books, pastorders WHERE pastorders.orderUser = %s AND users.Username = pastorders.orderUser AND books.ISBN = pastorders.orderISBN')
     data = (localUserName, )
 
     cursor.execute(query, data)
@@ -193,6 +194,7 @@ def pastItems(username):
     print('-----------------------------------')
     for x in result:
         print(x)
+    print()
     cursor.close()
     connection.close()
     user.accountInfo(localUserName)

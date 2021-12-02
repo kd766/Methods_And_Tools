@@ -8,11 +8,14 @@ import cart
 def initialItemMenu(username):
     localUserName = username
     print('-----Item Menu-----')
+    print('User: ' + localUserName)
     print('1: View All Books')
     print('2: View Cart')
     print('3: Add Item to Cart')
     print('4: Remove Item from Cart')
-    print('5: Go Back')
+    print('5: Checkout')
+    print('6: Go Back')
+    print('-------------------')
 
     selection = input('Enter Integer of Menu to Enter: \n')
 
@@ -28,12 +31,14 @@ def initialItemMenu(username):
         print()
         cart.removeItemFromCart(localUserName)
     elif selection == '5':
+        print()
+        cart.checkout(localUserName)
+    elif selection == '6':
         print('\nReturning to Previous Menu\n')
         user.userMenu(localUserName)
     else:
         print('\nInvalid input.\n')
         initialItemMenu(localUserName)
-
 
 def viewAllBooks(username):
     localUserName = username
@@ -55,7 +60,7 @@ def viewAllBooks(username):
     result = cursor.fetchall()
 
     print('\nBooks: ISBN, Title, Author, Genre, Quantity')
-    print('----------------------------------------')
+    print('----------------------------------------------')
     for x in result:
         print(x)
     print()
