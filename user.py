@@ -2,9 +2,10 @@
 
 import mysql.connector
 import sys
+import item
+import cart
 
-#globalUser = 'p1'
-
+# Print all user information
 try:
     connection = mysql.connector.connect(
         host="localhost",
@@ -14,11 +15,9 @@ try:
     )
 except:
     print("Failed connection.")
-
     sys.exit()
 
 cursor = connection.cursor()
-
 cursor.execute("SELECT * FROM users")
 
 result = cursor.fetchall()
@@ -100,7 +99,6 @@ def login(user, password):
     cursor.close()
     connection.close()
 
-
 def createUser(username, password):
     try:
         connection = mysql.connector.connect(
@@ -140,9 +138,10 @@ def userMenu(username):
 
     if selection == '1':
         print()
-        #userMenu()
+        item.initialItemMenu(localUserName)
     elif selection == '2':
         print()
+        cart.cartMenu(localUserName)
     elif selection == '3':
         accountInfo(localUserName)
     elif selection == '4':
@@ -152,7 +151,7 @@ def userMenu(username):
         sys.exit()
     else:
         print('Invalid Input\n')
-        userMenu()
+        userMenu(localUserName)
 
 def accountInfo(username):
     localUserName = username
@@ -169,6 +168,9 @@ def accountInfo(username):
     if selection == '1':
         print()
         editAccount(localUserName)
+    elif selection == '2':
+        print()
+        cart.pastItems(localUserName)
     elif selection == '3':
         print('Logging out user: ' + localUserName + '\n\n')
         initialMenu()
@@ -187,7 +189,7 @@ def accountInfo(username):
 
 def editAccount(username):
     localUserName = username
-    print('Edit Account ' + localUserName + ':')
+    print('Edit Account for user: ' + localUserName)
     print('1: Update First Name')
     print('2: Update Last Name')
     print('3: Update Credit Card Number')
@@ -211,9 +213,27 @@ def editAccount(username):
             editAccount(localUserName)
         else:
             editLName(localUserName, update)
+    elif selection == '3':
+        update = input('Enter new CreditCard number: ')
+        if len(update) != 16:
+            print('Invalid input. Returning to Edit Account Menu\n')
+            editAccount(localUserName)
+        else:
+            #print('yes\n')
+            editCreditCard(localUserName, update)
+    elif selection == '4':
+        update = input('Enter new Shipping Address: ')
+        if update == '':
+            print('Invalid input. Returning to Edit Account Menu\n')
+            editAccount(localUserName)
+        else:
+            editShipping(localUserName, update)
     elif selection == '5':
         print('Returning to Previous Menu\n')
         accountInfo(localUserName)
+    else:
+        print('Invalid Input\n')
+        editAccount(localUserName)
 
 def editFName(username, update):
     localUserName = username
@@ -238,7 +258,6 @@ def editFName(username, update):
     connection.commit()
     sys.exit()
 
-
 def editLName(username, update):
     localUserName = username
     localUpdate = update
@@ -262,6 +281,51 @@ def editLName(username, update):
     connection.commit()
     sys.exit()
 
+def editCreditCard(username, update):
+    localUserName = username
+    localUpdate = update
+    try:
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="methods"
+        )
+    except:
+        print("Failed connection.")
+        sys.exit()
+    
+    cursor = connection.cursor()
+    query = "UPDATE users SET CardNumber = %s WHERE Username = %s"
+    data = (localUpdate, localUserName)
+
+    print('User: ' + localUserName + ' changed LastName to: ' + localUpdate + '\n')
+    cursor.execute(query, data)
+    connection.commit()
+    sys.exit()
+
+def editShipping(username, update):
+    localUserName = username
+    localUpdate = update
+    try:
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="methods"
+        )
+    except:
+        print("Failed connection.")
+        sys.exit()
+    
+    cursor = connection.cursor()
+    query = "UPDATE users SET ShippingAddress = %s WHERE Username = %s"
+    data = (localUpdate, localUserName)
+
+    print('User: ' + localUserName + ' changed ShippingAddress to: ' + localUpdate + '\n')
+    cursor.execute(query, data)
+    connection.commit()
+    sys.exit()
 
 def deleteAccount(username):
     localUserName = username
@@ -288,5 +352,4 @@ def deleteAccount(username):
     print('Account: ' + localUserName + ' Deleted. Exiting Program')
     cursor.close()
     connection.close()
-    #initialMenu()
     sys.exit()
